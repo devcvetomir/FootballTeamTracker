@@ -14,15 +14,11 @@ class TeamResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-       $data = [
-
+        return [
             'id' => $this->id,
             'Name' => $this->name,
-            'Players' => $this->players->isEmpty() ? [] : PlayerResource::collection($this->players), // ok? TODO sorting?
+            'Players' => PlayerResource::collection($this->players),
             'Total Goals' => $this->players->sum('goals_season'),
         ];
-
-       return $data;
-
     }
 }

@@ -1,28 +1,21 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\v1\PlayerController as ApiPlayerController;
-use App\Http\Controllers\Api\v1\TeamController as ApiTeamController;
+use App\Http\Controllers\Api\v1\PlayerController as PlayerController;
+use App\Http\Controllers\Api\v1\TeamController as TeamController;
+use App\Http\Controllers\TokenController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::post('/token',[TokenController::class,'getToken']);
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/check-token',[TokenController::class,'checkToken']);
+
+    Route::apiResource('players',PlayerController::class);
+    Route::apiResource('teams', TeamController::class);
 });
 
 
-
-Route::prefix('v1/')->group(function () {
-    Route::resource('players', ApiPlayerController::class);
-    Route::resource('teams', ApiTeamController::class);
-});

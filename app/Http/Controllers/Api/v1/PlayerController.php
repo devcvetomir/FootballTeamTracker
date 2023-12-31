@@ -2,62 +2,82 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\ApiResponseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePlayerRequest;
 use App\Http\Requests\UpdatePlayerRequest;
-use Illuminate\Http\Request;
 use App\Models\Player;
 use App\Http\Resources\PlayerResource;
-use App\Http\Resources\PlayerCollection;
 use App\Http\Requests\PlayerFilterRequest;
 
-class PlayerController extends ApiResponseController
+class PlayerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(PlayerFilterRequest $request)
     {
-        $query = Player::query();
+        try {
+            $query = Player::query();
 
-        if ($request->has('order_by') && $request->has('order_direction')) {
-            $query->orderBy($request->input('order_by'), $request->input('order_direction') ?? '');
-            // TODO
+            $sortableColumns = ['name', 'position', 'age', 'nationality', 'goals_season', 'id'];
+
+            // Apply sorting based on query parameters
+            $sort = $request->input('sort', 'id');
+            $direction = $request->input('direction', 'asc');
+
+            // Ensure the column is sortable
+            if (in_array($sort, $sortableColumns)) {
+                $query->orderBy($sort, $direction);
+            }
+
+            $filters = ['name', 'position', 'age', 'nationality', 'goals_season'];
+            foreach ($filters as $filter) {
+                $query->when($request->filled($filter), function ($query) use ($filter, $request) {
+                    return $query->where($filter, $request->input($filter));
+                });
+            }
+
+            // Pagination
+            $players = $query->paginate(5);
+
+            return PlayerResource::collection($players);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching players'], 500);
         }
-        $players = $query->paginate(10);
-        return $this->successResponse(PlayerResource::collection($players),'ok',200);
     }
 
     public function store(StorePlayerRequest $request)
     {
-        $player = Player::create($request->validated());
+        try {
+            $player = Player::create($request->validated());
 
-        return $this->successResponse($player,'Player Added',201);
+            return response()->json(['message' => 'Player Created']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error creating player'], 500);
+        }
     }
-
 
     public function show(Player $player)
     {
-
         return new PlayerResource($player);
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePlayerRequest $request, Player $player)
     {
+        try {
+            $player->update($request->validated());
 
-        $player->update($request->all());
-
-        return new PlayerResource($player);
+            return response()->json(['message' => 'Updated'], 202,);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating player'], 500);
+        }
     }
-
 
     public function destroy(Player $player)
     {
-        $player->delete();
-        return response()->json(['message' => 'Player deleted successfully']);
+        try {
+            $player->delete();
+
+            return response()->json(['message' => 'Player deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error deleting player'], 500);
+        }
     }
 }

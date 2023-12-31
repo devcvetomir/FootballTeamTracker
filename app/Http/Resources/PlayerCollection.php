@@ -14,23 +14,11 @@ class PlayerCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        $data = [
-            'id' => $this->id,
-            'Name' => $this->name,
-            'Goals' => $this->goals_season,
-            'Position' => $this->position,
-            'Age' => $this->age,
+        return [
+            'data' => $this->collection->map(function ($player) {
+                return new PlayerResource($player);
+            }),
         ];
 
-        if ($this->team) {
-            $data['Team'] = [
-                'Name' => $this->team->name,
-            ];
-        } else {
-            $data['Team'] = 'No Team';
-        }
-
-
-        return $data;
     }
 }

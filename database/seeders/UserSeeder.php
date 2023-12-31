@@ -17,10 +17,8 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => Hash::make('123'), // You can replace 'password' with the desired password
-            'is_admin' => true,
+            'password' => Hash::make('admin'),
         ]);
 
-        // You can add more user seeds here if needed
     }
 }

@@ -21,12 +21,17 @@ class PlayerFilterRequest extends FormRequest
      */
     public function rules()
     {
-        $data = [
-
-            'order_by' => ['sometimes', 'string', 'in:name,age,nationality,goals_season'],
-            'order_direction' => ['sometimes', 'string', 'in:asc,desc'],
+        return [
+            'sort' => ['sometimes', 'string', 'in:name,age,nationality,goals_season,id'],
+            'direction' => ['sometimes', 'string', 'in:asc,desc'],
+            'name' => ['sometimes', 'string'],
+            'position' => ['sometimes', 'in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured'],
+            'age' => ['sometimes', 'integer', 'min:13'],
+            'nationality' => ['sometimes', 'string'],
+            'goals_season' => ['sometimes', 'integer', 'min:0'],
         ];
-        return $data;
+
     }
+
 
 }

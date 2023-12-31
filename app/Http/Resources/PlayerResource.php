@@ -12,25 +12,15 @@ class PlayerResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
-        $data = [
+        return [
             'id' => $this->id,
-            'Name' => $this->name,
-            'Goals' => $this->goals_season,
-            'Position' => $this->position,
-            'Age' => $this->age,
+            'name' => $this->name,
+            'position' => $this->position,
+            'age' => $this->age,
+            'nationality' => $this->nationality,
+            'goals_season' => $this->goals_season,
         ];
-
-        if ($this->team) {
-            $data['Team'] = [
-                'Name' => $this->team->name,
-            ];
-        } else {
-            $data['Team'] = 'No Team';
-        }
-
-
-        return $data;
     }
 }

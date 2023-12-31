@@ -1,72 +1,68 @@
 <?php
-
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\ApiResponseController;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTeamRequest;
-use App\Http\Requests\UpdateTeamRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Http\Resources\TeamResource;
+use App\Http\Requests\StoreTeamRequest;
+use App\Http\Requests\UpdateTeamRequest;
 
-class TeamController extends ApiResponseController
+class TeamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
+
     public function index()
     {
-        $teams = Team::paginate(5);
+        try {
+            $teams = Team::paginate(5);
 
-        return $this->successResponse(TeamResource::collection($teams), 'OK', 200);
+            return response()->json(TeamResource::collection($teams));
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching teams'], 500);
+        }
     }
 
+    public function show(Team $team)
+    {
+        try {
+            return response()->json(new TeamResource($team));
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Team not found'], 404);
+        }
+    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTeamRequest $request)
     {
+        try {
+            Team::create($request->validated());
 
-
-        $team = Team::create($request->all());
-
-        return new TeamResource($team);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $team = Team::with('players')->find($id);
-
-        if (!$team) {
-            return $this->errorResponse(null, 404, 'Team not found.');
+            return response()->json(['message' => 'Team created successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error creating team'], 500);
         }
-
-        return $this->successResponse($team, 200, 'Team retrieved successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTeamRequest $request, Team $team)
     {
+        try {
 
-
-        $team->update($request->all());
-
-        return new TeamResource($team);
+            $team->update($request->validated());
+            return response()->json(new TeamResource($team));
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Team not found'], 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Team $team)
     {
-        $team->delete();
-        return response()->json(['message' => 'Team deleted successfully']);
+        try {
+
+            $team->delete();
+            return response()->json(['message' => 'Team deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Team not found'], 404);
+        }
     }
 }

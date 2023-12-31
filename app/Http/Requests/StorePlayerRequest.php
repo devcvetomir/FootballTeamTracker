@@ -23,9 +23,9 @@ class StorePlayerRequest extends FormRequest
     {
        $data = [
            'name' => 'required|string|max:255',
-           'position' => 'required|nullable|in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured',
-           'age' => 'required|integer|min:13',
-           'nationality' => 'required|string|max:255',
+           'position' => 'nullable|in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured',
+           'age' => 'nullable|integer|min:13',
+           'nationality' => 'nullable|string|max:255',
            'goals_season' => 'integer|min:0',
        ];
 

@@ -2,29 +2,49 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * The list of the inputs that are never flashed to the session on validation exceptions.
-     *
-     * @var array<int, string>
-     */
-    protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
+    // ... (other methods and properties)
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Render an exception into an HTTP response.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable               $exception
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function register(): void
+    public function render($request, Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+
+
+        if ($exception instanceof ModelNotFoundException) {
+             return response()->json([
+                'error' => 'Resource not found.',
+                'message' => $exception->getMessage(),
+            ], 404);     }
+
+
+
+
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                'error'   => 'Validation failed',
+                'message' => $exception->getMessage(),
+                'errors'  => $exception->errors(),
+            ], 422);
+        }
+
+        // You can add more conditions for other exceptions and customize the response accordingly.
+
+        // If it's not a specific exception, let the parent class handle it
+        return parent::render($request, $exception);
     }
+
+
 }
