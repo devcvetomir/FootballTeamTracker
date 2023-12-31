@@ -18,11 +18,9 @@ class PlayerController extends Controller
 
             $sortableColumns = ['name', 'position', 'age', 'nationality', 'goals_season', 'id'];
 
-            // Apply sorting based on query parameters
             $sort = $request->input('sort', 'id');
             $direction = $request->input('direction', 'asc');
 
-            // Ensure the column is sortable
             if (in_array($sort, $sortableColumns)) {
                 $query->orderBy($sort, $direction);
             }
@@ -34,7 +32,6 @@ class PlayerController extends Controller
                 });
             }
 
-            // Pagination
             $players = $query->paginate(5);
 
             return PlayerResource::collection($players);
@@ -46,7 +43,7 @@ class PlayerController extends Controller
     public function store(StorePlayerRequest $request)
     {
         try {
-            $player = Player::create($request->validated());
+            Player::create($request->validated());
 
             return response()->json(['message' => 'Player Created']);
         } catch (\Exception $e) {

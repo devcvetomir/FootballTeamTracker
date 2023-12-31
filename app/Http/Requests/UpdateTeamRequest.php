@@ -21,10 +21,10 @@ class UpdateTeamRequest extends FormRequest
      */
     public function rules(): array
     {
-        $data = [
+        return [
 
             'name' => ['required', 'string'],
         ];
-        return $data;
+
     }
 }

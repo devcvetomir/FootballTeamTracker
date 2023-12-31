@@ -1,4 +1,28 @@
-# Домашно Задание: API за Управление на Играчите на Футболен Клуб "Барселона"
+##
+- git pull 
+- .env file db conn
+- composer install
+- php artisan migrate:fresh --seed
+
+user: admin@admin.com / password: admin
+
+За тоукън : /api/v1/token , трябва да върне тоукъна. , Bearer Token, за проверка - /api/v1/check-token
+
+/api/v1/players - done
+/api/v1/teams - done ( без филтрите и сорта - копи пейст ще е от players)
+
+'sort' => - name,age,nationality,goals_season,id//
+'direction' =>asc,desc //
+
+Енфорснато е 'Accept', 'application/json' / и трябва да се сетне в curl .
+
+
+
+
+
+
+
+
 
 ## Цел
 Разработете RESTful API за управление на информацията за играчите на футболен клуб "Барселона", използвайки Laravel.

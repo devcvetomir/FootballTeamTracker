@@ -21,7 +21,7 @@ class StorePlayerRequest extends FormRequest
      */
     public function rules()
     {
-       $data = [
+      return [
            'name' => 'required|string|max:255',
            'position' => 'nullable|in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured',
            'age' => 'nullable|integer|min:13',
@@ -29,6 +29,6 @@ class StorePlayerRequest extends FormRequest
            'goals_season' => 'integer|min:0',
        ];
 
-        return $data;
+
     }
 }

@@ -11,7 +11,7 @@ class UpdatePlayerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,14 @@ class UpdatePlayerRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        return [
-            //
+       return [
+            'name' => 'required|string|max:255',
+            'position' => 'nullable|in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured',
+            'age' => 'nullable|integer|min:13',
+            'nationality' => 'nullable|string|max:255',
+            'goals_season' => 'integer|min:0',
         ];
     }
 }

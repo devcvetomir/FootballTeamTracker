@@ -29,9 +29,8 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-            $apiPrefix = env('api_prefix','/v/dev/');
             Route::middleware('api')
-                ->prefix($apiPrefix)
+                ->prefix('/api/v1/')
                 ->group(base_path('routes/api.php'));
         });
     }

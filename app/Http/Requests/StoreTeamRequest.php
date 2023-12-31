@@ -21,10 +21,10 @@ class StoreTeamRequest extends FormRequest
      */
     public function rules(): array
     {
-        $data = [
+      return [
 
             'name' => ['required', 'string','max:10'],
         ];
-        return $data;
+
     }
 }
