@@ -7,7 +7,7 @@
 
 Seeded User: admin@admin.com / password: admin
 
-За тоукън : /api/v1/token , трябва да върне тоукъна. , Bearer Token, за проверка - /api/v1/check-token
+За тоукън : /api/v1/login Bearer Token, за debug - /api/v1/check-token
 ##  Routes
 
 
@@ -26,7 +26,7 @@ Seeded User: admin@admin.com / password: admin
 
 ### Authentication
 
-- **POST**    api/v1/token   / body : email /password 
+- **POST**    api/v1/login   / body params: email /password 
 
 
 Енфорснато е 'Accept', 'application/json' / и трябва да се сетне в curl .

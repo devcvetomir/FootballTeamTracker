@@ -18,14 +18,7 @@ class Player extends Model
         'goals_season',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
 
-    ];
 
     public function team() {
         return $this->belongsTo(Team::class);

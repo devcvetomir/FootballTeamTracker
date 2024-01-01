@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class TokenController extends Controller
+class LoginController extends Controller
 {
-    public function getToken(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        $data = $request->validated();
 
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::attempt($data)) {
             return response()->json([
                 'message' => 'Wrong Credentials'
             ], 401);
@@ -35,11 +33,9 @@ class TokenController extends Controller
         $user = $request->user();
 
         if ($user) {
-            Log::info('Token is valid', ['user' => $user->toArray()]);
             return response()->json(['message' => 'Token is valid', 'user' => $user]);
         }
 
-        Log::warning('Unauthorized request', ['request' => $request->all()]);
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 

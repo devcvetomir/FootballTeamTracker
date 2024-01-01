@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('age');
             $table->string('nationality');
             $table->unsignedInteger('goals_season')->default(0);
-            $table->foreignId('team_id')->nullable()->constrained();
+            $table->foreignId('team_id')->nullable()->constrained()->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
 
