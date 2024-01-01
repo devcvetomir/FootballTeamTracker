@@ -1,54 +1,36 @@
 ##
-- git pull 
-- .env file db conn
-- composer install
-- php artisan migrate:fresh --seed
+-   ```bash
+     git pull 
+- edit .env db info
+- ```bash
+  composer install && php artisan migrate:fresh --seed
 
-user: admin@admin.com / password: admin
+Seeded User: admin@admin.com / password: admin
 
 За тоукън : /api/v1/token , трябва да върне тоукъна. , Bearer Token, за проверка - /api/v1/check-token
+##  Routes
 
-/api/v1/players - done
-/api/v1/teams - done ( без филтрите и сорта - копи пейст ще е от players)
 
-'sort' => - name,age,nationality,goals_season,id//
-'direction' =>asc,desc //
+- **GET**    api/v1/players/
+- **GET|HEAD**    api/v1/players/{player}
+- **PUT|PATCH**    api/v1/players/{player}
+- **DELETE**    api/v1/players/{player}
+
+### Teams
+
+- **GET|HEAD**    api/v1/teams
+- **POST**    api/v1/teams
+- **GET|HEAD**    api/v1/teams/{team}
+- **PUT|PATCH**    api/v1/teams/{team}
+- **DELETE**    api/v1/teams/{team}
+
+### Authentication
+
+- **POST**    api/v1/token   / body : email /password 
+
 
 Енфорснато е 'Accept', 'application/json' / и трябва да се сетне в curl .
 
 
 
 
-
-
-
-
-
-## Цел
-Разработете RESTful API за управление на информацията за играчите на футболен клуб "Барселона", използвайки Laravel.
-
-## Основни Изисквания
-
-### Модели и база данни
-- Модел `Играч` с атрибути: име, позиция, възраст, националност, брой голове за сезона.
-- Опционален модел `Отбор` с информация за отбора и връзка с играчите.
-
-### API Ендпойнти
-- `GET /players` - връща списък на всички играчи.
-- `GET /players/{id}` - връща детайлна информация за даден играч.
-- `POST /players` - създава нов играч.
-- `PUT /players/{id}` - обновява информацията за даден играч.
-- `DELETE /players/{id}` - изтрива играч.
-- Ендпойнти за управление на отбора (по избор).
-
-### Аутентикация
-- Използвайте Laravel Passport или Sanctum.
-
-### Валидация
-- Подходяща валидация за входните данни.
-
-## Допълнителни Изисквания (по избор)
-
-- **Сиидери:** Тестови данни.
-- **Тестване:** Тестове за API ендпойнтите.
-- **Пагинация и филтриране:** Пагинация и възможност за филтриране.

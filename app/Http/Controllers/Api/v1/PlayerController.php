@@ -13,42 +13,37 @@ class PlayerController extends Controller
 {
     public function index(PlayerFilterRequest $request)
     {
-        try {
-            $query = Player::query();
 
-            $sortableColumns = ['name', 'position', 'age', 'nationality', 'goals_season', 'id'];
+        $query = Player::query();
 
-            $sort = $request->input('sort', 'id');
-            $direction = $request->input('direction', 'asc');
+        $sortableColumns = ['name', 'position', 'age', 'nationality', 'goals_season', 'id'];
 
-            if (in_array($sort, $sortableColumns)) {
-                $query->orderBy($sort, $direction);
-            }
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
 
-            $filters = ['name', 'position', 'age', 'nationality', 'goals_season'];
-            foreach ($filters as $filter) {
-                $query->when($request->filled($filter), function ($query) use ($filter, $request) {
-                    return $query->where($filter, $request->input($filter));
-                });
-            }
-
-            $players = $query->paginate(5);
-
-            return PlayerResource::collection($players);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error fetching players'], 500);
+        if (in_array($sort, $sortableColumns)) {
+            $query->orderBy($sort, $direction);
         }
+
+        $filters = ['name', 'position', 'age', 'nationality', 'goals_season'];
+        foreach ($filters as $filter) {
+            $query->when($request->filled($filter), function ($query) use ($filter, $request) {
+                return $query->where($filter, $request->input($filter));
+            });
+        }
+
+        $players = $query->paginate(5);
+
+        return PlayerResource::collection($players);
+
     }
 
     public function store(StorePlayerRequest $request)
     {
-        try {
-            Player::create($request->validated());
+        Player::create($request->validated());
 
-            return response()->json(['message' => 'Player Created']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error creating player'], 500);
-        }
+        return response()->json(['message' => 'Created', 201]);
+
     }
 
     public function show(Player $player)
@@ -58,23 +53,18 @@ class PlayerController extends Controller
 
     public function update(UpdatePlayerRequest $request, Player $player)
     {
-        try {
-            $player->update($request->validated());
+        $player->update($request->validated());
 
-            return response()->json(['message' => 'Updated'], 202,);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error updating player'], 500);
-        }
+        return response()->json(['message' => 'Updated'], 202,);
+
     }
 
     public function destroy(Player $player)
     {
-        try {
-            $player->delete();
 
-            return response()->json(['message' => 'Player deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error deleting player'], 500);
-        }
+        $player->delete();
+
+        return response()->json(['message' => 'Deleted',204]);
     }
+
 }
