@@ -25,13 +25,6 @@ class PlayerController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $filters = ['name', 'position', 'age', 'nationality', 'goals_season'];
-        foreach ($filters as $filter) {
-            $query->when($request->filled($filter), function ($query) use ($filter, $request) {
-                return $query->where($filter, $request->input($filter));
-            });
-        }
-
         $players = $query->paginate(5);
 
         return PlayerResource::collection($players);
@@ -64,7 +57,7 @@ class PlayerController extends Controller
 
         $player->delete();
 
-        return response()->json(['message' => 'Deleted',204]);
+        return response()->noContent();
     }
 
 }

@@ -24,11 +24,7 @@ class PlayerFilterRequest extends FormRequest
         return [
             'sort' => ['sometimes', 'string', 'in:name,age,nationality,goals_season,id'],
             'direction' => ['sometimes', 'string', 'in:asc,desc'],
-            'name' => ['sometimes', 'string'],
-            'position' => ['sometimes', 'in:Goalkeeper,Defender,Midfielder,Forward,Useless,Injured'],
-            'age' => ['sometimes', 'integer', 'min:13'],
-            'nationality' => ['sometimes', 'string'],
-            'goals_season' => ['sometimes', 'integer', 'min:0'],
+
         ];
 
     }
